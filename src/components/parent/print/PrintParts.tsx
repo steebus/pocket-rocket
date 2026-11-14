@@ -18,8 +18,9 @@ export function SheetHeader({ kid, now, small }: { kid: Kid; now: number; small?
     <header className={small ? `${s.head} ${s.headSmall}` : s.head}>
       <Mascot id={kid.mascot} color={kid.color} size={small ? "11mm" : "22mm"} />
       <div className={s.headWho}>
-        <h1 className={s.name}>{kid.name}</h1>
-        {small && <span className={s.headSub}>Jobs</span>}
+        <h1 className={s.name} style={small ? undefined : { fontSize: kid.name.length > 16 ? "8.5mm" : kid.name.length > 10 ? "11mm" : undefined }}>
+          {kid.name}
+        </h1>
       </div>
       <div className={s.headRight}>
         <span className={s.brand}>
@@ -76,8 +77,8 @@ interface CoinKind {
 const COIN_KINDS: CoinKind[] = [
   { cents: 200, cell: 28, fill: "#ffc83d", count: 2 },
   { cents: 100, cell: 26, fill: "#ffc83d", count: 3 },
-  { cents: 50, cell: 24, fill: "#ffe08a", count: 5 },
-  { cents: 20, cell: 23, fill: "#fff1c2", count: 6 },
+  { cents: 50, cell: 24, fill: "#ffe08a", count: 4 },
+  { cents: 20, cell: 23, fill: "#fff1c2", count: 7 },
 ];
 
 function CutCoin({ kind }: { kind: CoinKind }) {
@@ -152,7 +153,7 @@ export function JobsTable({ kid, jobs }: { kid: Kid; jobs: Job[] }) {
       <thead>
         <tr className={s.legendRow}>
           <th colSpan={3} className={s.thTitle}>
-            {kid.name}&apos;s jobs
+            Jobs
           </th>
           <th className={s.thLegend}>
             <span className={s.legend}>

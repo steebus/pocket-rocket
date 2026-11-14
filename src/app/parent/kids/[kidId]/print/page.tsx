@@ -15,10 +15,10 @@ import styles from "./page.module.css";
 
 /**
  * With this many jobs or fewer, the jobs list shares sheet 1 with the jar and coins (verified by
- * printing to PDF: 9 rows of 13.5mm still leave the jar at 110mm tall and everything on one A4 page).
+ * printing to PDF: 8 rows of 13mm still leave the jar at 110mm tall and everything on one A4 page).
  * Above it the whole list moves to sheet 2 and the jar goes big.
  */
-const ONE_SHEET_MAX_JOBS = 9;
+const ONE_SHEET_MAX_JOBS = 8;
 
 export default function PrintPage() {
   const { kidId } = useParams<{ kidId: string }>();

@@ -18,7 +18,7 @@
   line-height: 1.2;
   display: flex;
   flex-direction: column;
-  gap: 5mm;
+  gap: 4mm;
   overflow: hidden;
   print-color-adjust: exact;
   -webkit-print-color-adjust: exact;
@@ -91,11 +91,6 @@
   font-size: 8mm;
 }
 
-.headSub {
-  font-size: 5mm;
-  font-weight: 700;
-}
-
 .headRight {
   display: grid;
   justify-items: end;
@@ -138,9 +133,9 @@
 /* ---------- jar ---------- */
 
 .jar {
-  --jw: 86mm;
-  --jh: 110mm;
-  --bal: 17mm;
+  --jw: 74mm;
+  --jh: 112mm;
+  --bal: 16mm;
   position: relative;
   flex: none;
   width: var(--jw);
@@ -149,9 +144,9 @@
 }
 
 .jarBig {
-  --jw: 124mm;
-  --jh: 158mm;
-  --bal: 25mm;
+  --jw: 116mm;
+  --jh: 146mm;
+  --bal: 24mm;
 }
 
 .lid {
@@ -255,6 +250,7 @@
 .coins {
   flex: 1;
   min-width: 0;
+  max-width: 110mm;
   display: flex;
   flex-direction: column;
   gap: 3mm;
@@ -288,6 +284,7 @@
 
 .topRoomy .coins {
   width: 100%;
+  max-width: none;
   align-items: center;
 }
 
@@ -380,12 +377,18 @@
 
 .dayRow th {
   height: 6mm;
-  border-left: 0.8mm solid var(--ink);
-  border-right: 0.8mm solid var(--ink);
   background: #fff;
   font-size: 3.4mm;
   font-weight: 900;
   vertical-align: middle;
+}
+
+.dayRow th:first-child {
+  border-left: 0.8mm solid var(--ink);
+}
+
+.dayRow th:last-child {
+  border-right: 0.8mm solid var(--ink);
 }
 
 .days {
@@ -395,7 +398,7 @@
 
 .days > * {
   flex: none;
-  width: 18mm;
+  width: 17.6mm;
   text-align: center;
 }
 
@@ -405,7 +408,7 @@
 }
 
 .jobRow td {
-  height: 13.5mm;
+  height: 13mm;
   padding: 0;
   border-top: 0.5mm solid var(--ink);
   vertical-align: middle;
@@ -457,7 +460,7 @@
   align-items: center;
   justify-content: center;
   gap: 1mm;
-  width: 18mm;
+  width: 17.6mm;
   flex: none;
 }
 
@@ -490,7 +493,7 @@
 }
 
 .once .pair {
-  width: 18mm;
+  width: 17.6mm;
 }
 
 .onceText {
