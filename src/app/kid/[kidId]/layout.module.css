@@ -8,6 +8,8 @@
   background: var(--kid-ground);
   display: flex;
   flex-direction: column;
+  /* Tab pages slide in from the side; clip them so they never widen the page (a scrollbar would nudge the fixed nav). */
+  overflow-x: clip;
 }
 
 .top {
