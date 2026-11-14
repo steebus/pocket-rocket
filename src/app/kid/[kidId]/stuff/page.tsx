@@ -28,6 +28,7 @@ function dayLabel(ts: number, now: number): string {
 }
 
 function describe(t: Txn, state: PocketState): string {
+  if (t.type === "interest") return "Your money grew";
   if (t.note) return t.note;
   if (t.type === "job") return state.jobs.find((j) => j.id === t.jobId)?.name ?? "A job";
   return t.type === "gift" ? "A gift" : "Spent";
@@ -38,6 +39,7 @@ function TxnPicture({ t, state }: { t: Txn; state: PocketState }) {
     const icon = state.jobs.find((j) => j.id === t.jobId)?.icon;
     return icon ? <JobIcon id={icon} size={40} /> : <Icon name="coin" size={34} />;
   }
+  if (t.type === "interest") return <Icon name="sprout" size={38} strokeWidth={3} />;
   return <Icon name={t.type === "gift" ? "gift" : "cart"} size={34} />;
 }
 

@@ -9,3 +9,22 @@
   justify-self: start;
 }
 
+
+.percent {
+  position: relative;
+}
+
+.percent > input {
+  width: 100%;
+  padding-right: 40px;
+  font-variant-numeric: tabular-nums;
+}
+
+.percent > span {
+  position: absolute;
+  right: 15px;
+  top: 50%;
+  translate: 0 -50%;
+  font-weight: var(--w-label);
+  pointer-events: none;
+}

@@ -1,3 +1,4 @@
+import { hasEarnedInterest } from "./interest";
 import type { Badge, Claim, Goal, Job, JobStatus, Kid, PocketState, Repeat, Txn } from "./types";
 
 /** Pure read helpers. Each is a future Convex query. */
@@ -128,6 +129,7 @@ export function badgesOf(state: PocketState, kidId: string, now: number): Badge[
     { id: "saved-10", name: "Saved $10", description: "Have $10 in your jar", earned: balance >= 1000 },
     { id: "saved-25", name: "Saved $25", description: "Have $25 in your jar", earned: balance >= 2500 },
     { id: "goal", name: "Goal reached", description: "Save enough for your goal", earned: reachedGoal },
+    { id: "money-grew", name: "Money grew", description: "Watch your jar earn interest", earned: hasEarnedInterest(state, kidId) },
     { id: "first-spend", name: "First spend", description: "Spend some of your money", earned: spent },
   ];
 }

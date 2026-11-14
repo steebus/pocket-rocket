@@ -1,7 +1,7 @@
 import { Icon } from "@/components/art/Icon";
 import styles from "./BadgeMedal.module.css";
 
-const LOOK: Record<string, { fill: string; icon?: "check" | "target" | "cart" | "flame"; text?: string; over?: string }> = {
+const LOOK: Record<string, { fill: string; icon?: "check" | "target" | "cart" | "flame" | "sprout"; text?: string; over?: string }> = {
   "first-job": { fill: "var(--ok)", icon: "check" },
   "ten-jobs": { fill: "var(--violet)", text: "10" },
   "streak-3": { fill: "var(--tint-coral)", icon: "flame", over: "3" },
@@ -9,6 +9,7 @@ const LOOK: Record<string, { fill: string; icon?: "check" | "target" | "cart" | 
   "saved-10": { fill: "var(--gold)", text: "$10" },
   "saved-25": { fill: "var(--gold)", text: "$25" },
   goal: { fill: "var(--tint-violet)", icon: "target" },
+  "money-grew": { fill: "var(--glass)", icon: "sprout" },
   "first-spend": { fill: "var(--tint-gold)", icon: "cart" },
 };
 

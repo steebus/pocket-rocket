@@ -1,3 +1,4 @@
+import { daysBefore } from "./interest";
 import type { Claim, Job, Kid, PocketState, Txn } from "./types";
 
 const HOUR = 3_600_000;
@@ -8,7 +9,7 @@ function startOfDay(ts: number): number {
   return d.getTime();
 }
 
-/** Demo family: Mia $12.50 (4 day streak), Leo $31.20, Zadie $4.80, two claims waiting. */
+/** Demo family: Mia $12.50 (4 day streak), Leo $31.20 (interest on), Zadie $4.80, two claims waiting. */
 export function makeFixtures(now: number): PocketState {
   /** A moment `daysAgo` local days back at roughly `hour` o'clock (never in the future). */
   const at = (daysAgo: number, hour: number): number => {
@@ -19,7 +20,9 @@ export function makeFixtures(now: number): PocketState {
 
   const kids: Kid[] = [
     { id: "kid-mia", name: "Mia", mascot: "blob", color: "pink", goal: { name: "Scooter", icon: "scooter", priceCents: 4000 } },
-    { id: "kid-leo", name: "Leo", mascot: "bean", color: "sky", goal: { name: "Kite", icon: "kite", priceCents: 1800 } },
+    { id: "kid-leo", name: "Leo", mascot: "bean", color: "sky", goal: { name: "Kite", icon: "kite", priceCents: 1800 },
+      // Interest is on, last paid three days ago, so the first open of Leo's jar shows the celebration.
+      interest: { enabled: true, ratePercent: 1, per: "week", paidThrough: daysBefore(now, 3), carry: 0 } },
     { id: "kid-zadie", name: "Zadie", mascot: "cat", color: "lime" },
   ];
 

@@ -37,6 +37,7 @@ A pocket money ledger a three-year-old can use on their own: pictures first, spo
 - **Kid view:** balance, available jobs, waiting jobs, savings goal, picture-based history, streaks and badges. Big picture plus a one or two word label per job, and tapping reads the name aloud (device speech synthesis).
 - **Savings goals:** a child saves towards one thing with a picture and a price; progress shown as they earn.
 - **Streaks and badges:** rewards for consecutive days of jobs and milestones.
+- **Interest (optional, per child):** a parent can switch interest on for a child's account and sets the rate (more than 0 and up to 100 percent a week, month or year). It is meant for older kids, to show why saving pays. Interest compounds daily on the jar balance and is added once a day, the next time the child opens their jar, as a big "Your money grew!" moment before the coins drop in. Turning it on starts counting from that day, turning it off keeps past interest in the history, and it is still pretend money like everything else.
 - **Sounds:** coin and cheer effects, with a mute switch in the parent area.
 - **Avatars:** each child picks an illustrated character and a personal colour that themes their view. No photo upload.
 - **Devices:** phone and tablet both properly designed (kids mostly tablets, parents mostly phones).

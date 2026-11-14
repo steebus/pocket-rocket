@@ -11,9 +11,10 @@
 
 import { createContext, useCallback, useContext, useEffect, useMemo, useState, useSyncExternalStore, type ReactNode } from "react";
 import { makeFixtures } from "./fixtures";
+import { interestDue, kidInterest, rateError, startOfDay } from "./interest";
 import { balanceOf, jobsForKid } from "./selectors";
 import { sound } from "./sound";
-import type { Goal, Job, Kid, PocketState } from "./types";
+import type { Goal, Interest, Job, Kid, PocketState } from "./types";
 
 export const STORAGE_KEY = "pocket-rocket:v1";
 const UNLOCK_KEY = "pocket-rocket:unlocked";
@@ -32,6 +33,7 @@ export interface Actions {
   upsertKid(kid: KidInput): void;
   removeKid(kidId: string): void;
   setGoal(kidId: string, goal: Goal | undefined): void;
+  payInterest(kidId: string): void;
   setPin(pin: string): void;
   setMuted(muted: boolean): void;
   resetDemo(): void;
@@ -48,6 +50,7 @@ export type Action =
   | { type: "upsertKid"; kid: KidInput }
   | { type: "removeKid"; kidId: string }
   | { type: "setGoal"; kidId: string; goal: Goal | undefined }
+  | { type: "payInterest"; kidId: string }
   | { type: "setPin"; pin: string }
   | { type: "setMuted"; muted: boolean }
   | { type: "resetDemo" };
@@ -56,6 +59,22 @@ let seq = 0;
 function uid(prefix: string, now: number): string {
   seq += 1;
   return `${prefix}-${now.toString(36)}-${seq.toString(36)}-${Math.random().toString(36).slice(2, 6)}`;
+}
+
+/**
+ * Decide the stored interest for a saved kid. Off (or missing) stays off; turning it on starts counting from
+ * today (so the first payment is tomorrow); changing only the rate while on keeps the schedule.
+ * `incoming === undefined` means "leave as it was".
+ */
+function nextInterest(prev: Interest | undefined, incoming: Interest | undefined, now: number): Interest | undefined {
+  if (incoming === undefined) return prev;
+  const valid = rateError(incoming.ratePercent, incoming.per) === null;
+  const enabled = incoming.enabled && valid;
+  const wasOn = !!prev?.enabled;
+  const { ratePercent, per } = incoming;
+  if (!enabled) return { enabled: false, ratePercent, per, paidThrough: prev?.paidThrough ?? startOfDay(now), carry: prev?.carry ?? 0 };
+  if (wasOn && prev) return { enabled: true, ratePercent, per, paidThrough: prev.paidThrough, carry: prev.carry };
+  return { enabled: true, ratePercent, per, paidThrough: startOfDay(now), carry: 0 };
 }
 
 /** Pure state transitions. `now` is passed in so tests are deterministic. */
@@ -123,10 +142,38 @@ export function reduce(state: PocketState, action: Action, now: number): PocketS
       return { ...state, jobs: state.jobs.map((j) => (j.id === action.jobId ? { ...j, archived: true } : j)) };
     case "upsertKid": {
       const { id, ...rest } = action.kid;
-      if (id && state.kids.some((k) => k.id === id)) {
-        return { ...state, kids: state.kids.map((k) => (k.id === id ? { ...rest, id } : k)) };
-      }
-      return { ...state, kids: [...state.kids, { ...rest, id: id ?? uid("kid", now) }] };
+      const existing = id ? state.kids.find((k) => k.id === id) : undefined;
+      const interest = nextInterest(existing?.interest, rest.interest, now);
+      const kid = { ...rest, interest };
+      if (!interest) delete kid.interest;
+      if (existing) return { ...state, kids: state.kids.map((k) => (k.id === id ? { ...kid, id: existing.id } : k)) };
+      return { ...state, kids: [...state.kids, { ...kid, id: id ?? uid("kid", now) }] };
+    }
+    case "payInterest": {
+      const kid = state.kids.find((k) => k.id === action.kidId);
+      const i = kidInterest(kid);
+      if (!kid || !i) return state;
+      const due = interestDue(state, action.kidId, now);
+      if (due.days <= 0) return state;
+      const today = startOfDay(now);
+      return {
+        ...state,
+        kids: state.kids.map((k) => (k.id === kid.id ? { ...k, interest: { ...i, paidThrough: today, carry: due.carry } } : k)),
+        txns:
+          due.cents > 0
+            ? [
+                ...state.txns,
+                {
+                  id: uid("txn", now),
+                  kidId: kid.id,
+                  type: "interest",
+                  amountCents: due.cents,
+                  note: `Interest for ${due.days} ${due.days === 1 ? "day" : "days"}`,
+                  at: now,
+                },
+              ]
+            : state.txns,
+      };
     }
     case "removeKid":
       return {
@@ -216,6 +263,7 @@ export function PocketProvider({ children }: { children: ReactNode }) {
       upsertKid: (kid) => dispatch({ type: "upsertKid", kid }),
       removeKid: (kidId) => dispatch({ type: "removeKid", kidId }),
       setGoal: (kidId, goal) => dispatch({ type: "setGoal", kidId, goal }),
+      payInterest: (kidId) => dispatch({ type: "payInterest", kidId }),
       setPin: (pin) => dispatch({ type: "setPin", pin }),
       setMuted: (muted) => dispatch({ type: "setMuted", muted }),
       resetDemo: () => dispatch({ type: "resetDemo" }),

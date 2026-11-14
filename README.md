@@ -2,7 +2,7 @@
 
 A chore and pocket money tracker for one family. Pretend money only: the parent is the bank.
 
-Each child has a balance. Jobs have a picture, a short name and a value, are assigned to specific kids, and repeat daily, weekly or once. A child taps "I did it", a parent (behind a PIN) approves or declines, and approved jobs pay into the balance. Parents can also add gifts and deduct spends. Built for ages 3 to 10, so everything a child does works with pictures alone.
+Each child has a balance. Jobs have a picture, a short name and a value, are assigned to specific kids, and repeat daily, weekly or once. A child taps "I did it", a parent (behind a PIN) approves or declines, and approved jobs pay into the balance. Parents can also add gifts and deduct spends, and can switch on optional daily-compounding interest for a child (older kids), which is paid the next time they open their jar. Built for ages 3 to 10, so everything a child does works with pictures alone.
 
 Next.js 15 (App Router, TypeScript), React 19, CSS Modules with design tokens in `src/app/globals.css`, Motion for animation, vitest for the pure logic. Money is always integer cents.
 
@@ -21,6 +21,7 @@ Demo family: Mia, Leo and Zadie, seeded from `src/lib/fixtures.ts`. The parent P
 ## Layout
 
 - `src/lib/types.ts` data shapes
+- `src/lib/interest.ts` pure interest rules (`interestDue`, rate validation); `payInterest` is a store action
 - `src/lib/selectors.ts` pure reads (balance, jobs for a kid, streaks, badges)
 - `src/lib/store.tsx` provider, `reduce` (pure state transitions), `usePocket`, `useParentLock`
 - `src/components/art` mascots, job pictures, goal pictures, UI glyphs (authored SVG)

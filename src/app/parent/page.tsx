@@ -10,6 +10,7 @@ import { MoneySheet, type MoneyMode } from "@/components/parent/MoneySheet";
 import ui from "@/components/parent/ui.module.css";
 import { BalanceNumber } from "@/components/ui/BalanceNumber";
 import { ButtonLink } from "@/components/ui/Button";
+import { formatRate, kidInterest, PER_LABEL } from "@/lib/interest";
 import { formatCents, formatShort } from "@/lib/money";
 import { balanceOf, goalProgress, streakOf, waitingClaims } from "@/lib/selectors";
 import { sound } from "@/lib/sound";
@@ -99,6 +100,12 @@ export default function Dashboard() {
                   <span className={ui.grow}>
                     <span className={styles.kidName}>{kid.name}</span>
                     <span className={ui.sub}>{subLine(kid.id)}</span>
+                    {kidInterest(kid) && (
+                      <span className={[ui.sub, styles.interest].join(" ")}>
+                        <Icon name="sprout" size={16} strokeWidth={3} />
+                        {formatRate(kidInterest(kid)!.ratePercent)}% {PER_LABEL[kidInterest(kid)!.per]}
+                      </span>
+                    )}
                   </span>
                 </Link>
                 <BalanceNumber cents={balanceOf(state, kid.id)} className={ui.amt} />

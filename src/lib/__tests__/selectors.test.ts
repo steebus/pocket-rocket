@@ -154,7 +154,7 @@ describe("goalProgress and badges", () => {
   });
   it("always returns the full badge list", () => {
     const b = badgesOf(make(), "k1", NOW);
-    expect(b).toHaveLength(8);
+    expect(b).toHaveLength(9);
     expect(b.every((x) => !x.earned)).toBe(true);
   });
   it("earns badges from history", () => {

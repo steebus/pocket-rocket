@@ -6,9 +6,11 @@ import { Icon } from "@/components/art/Icon";
 import { MASCOT_IDS, Mascot } from "@/components/art/Mascot";
 import { Button } from "@/components/ui/Button";
 import { KID_COLORS } from "@/lib/kidColors";
-import { formatCents, parseDollars } from "@/lib/money";
+import { DEFAULT_INTEREST, dailyRate, formatRate, parseRate, PER_LABEL, rateError } from "@/lib/interest";
+import { formatCents, formatShort, parseDollars } from "@/lib/money";
+import { balanceOf } from "@/lib/selectors";
 import { usePocket } from "@/lib/store";
-import type { Goal, GoalIconId, Kid, KidColorId, MascotId } from "@/lib/types";
+import type { Goal, GoalIconId, InterestPer, Kid, KidColorId, MascotId } from "@/lib/types";
 import { centsToInput } from "./labels";
 import styles from "./KidForm.module.css";
 import ui from "./ui.module.css";
@@ -16,6 +18,7 @@ import ui from "./ui.module.css";
 const COLOR_IDS = Object.keys(KID_COLORS) as KidColorId[];
 const MAX_NAME = 16;
 const MAX_PRICE = 100_000;
+const PERS: InterestPer[] = ["week", "month", "year"];
 
 /** Shared by "new kid" and "edit kid". Calls `onSaved` after the kid is stored. */
 export function KidForm({
@@ -42,10 +45,14 @@ export function KidForm({
   const [goalName, setGoalName] = useState(kid?.goal?.name ?? "");
   const [goalIcon, setGoalIcon] = useState<GoalIconId | null>(kid?.goal?.icon ?? null);
   const [price, setPrice] = useState(kid?.goal ? centsToInput(kid.goal.priceCents) : "");
+  const [interestOn, setInterestOn] = useState(!!kid?.interest?.enabled);
+  const [rate, setRate] = useState(formatRate(kid?.interest?.ratePercent ?? DEFAULT_INTEREST.ratePercent));
+  const [per, setPer] = useState<InterestPer>(kid?.interest?.per ?? DEFAULT_INTEREST.per);
   const [tried, setTried] = useState(false);
 
   const priceCents = parseDollars(price);
-  const errors: { name?: string; goalName?: string; goalIcon?: string; price?: string } = {};
+  const rateNum = parseRate(rate);
+  const errors: { name?: string; goalName?: string; goalIcon?: string; price?: string; rate?: string } = {};
   if (!name.trim()) errors.name = "Add a name so everyone knows whose jar this is.";
   if (hasGoal) {
     if (!goalName.trim()) errors.goalName = "Name the goal, like Scooter.";
@@ -53,6 +60,10 @@ export function KidForm({
     if (price.trim() === "" || priceCents === null) errors.price = "Enter the price like 40 or 12.50.";
     else if (priceCents <= 0) errors.price = "The price needs to be more than $0.";
     else if (priceCents > MAX_PRICE) errors.price = `The most you can enter is ${formatCents(MAX_PRICE)}.`;
+  }
+  if (interestOn) {
+    const msg = rateError(rateNum, per);
+    if (msg) errors.rate = msg;
   }
   const invalid = Object.keys(errors).length > 0;
   const show = (k: keyof typeof errors) => (tried ? errors[k] : undefined);
@@ -68,7 +79,14 @@ export function KidForm({
     }
     let goal: Goal | undefined;
     if (hasGoal && goalIcon && priceCents !== null) goal = { name: goalName.trim(), icon: goalIcon, priceCents };
-    const input = { id: kid?.id, name: name.trim(), mascot, color, goal };
+    // paidThrough and carry are decided by the store (starting from today when interest is switched on).
+    const interest =
+      interestOn && rateNum !== null
+        ? { enabled: true, ratePercent: rateNum, per, paidThrough: kid?.interest?.paidThrough ?? 0, carry: kid?.interest?.carry ?? 0 }
+        : kid?.interest
+          ? { ...kid.interest, enabled: false }
+          : undefined;
+    const input = { id: kid?.id, name: name.trim(), mascot, color, goal, interest };
     actions.upsertKid(input);
     onSaved();
   };
@@ -222,6 +240,67 @@ export function KidForm({
         )}
       </fieldset>
 
+      <fieldset className={ui.group}>
+        <legend className={ui.legend}>Interest</legend>
+        <div className={ui.switchRow}>
+          <label htmlFor={`${id}-interest`} className={ui.label}>
+            Interest is {interestOn ? "on" : "off"}
+          </label>
+          <span className={ui.switch}>
+            <input
+              id={`${id}-interest`}
+              type="checkbox"
+              role="switch"
+              checked={interestOn}
+              onChange={(e) => setInterestOn(e.target.checked)}
+            />
+            <span className={ui.track} aria-hidden="true" />
+          </span>
+        </div>
+        {interestOn ? (
+          <div className={styles.goalBox}>
+            <div className={ui.field} data-invalid={show("rate") ? "" : undefined}>
+              <label className={ui.label} htmlFor={`${id}-rate`}>
+                Interest rate
+              </label>
+              <div className={styles.percent}>
+                <input
+                  id={`${id}-rate`}
+                  inputMode="decimal"
+                  autoComplete="off"
+                  placeholder="1"
+                  value={rate}
+                  onChange={(e) => setRate(e.target.value)}
+                  aria-invalid={show("rate") ? true : undefined}
+                  aria-describedby={show("rate") ? `${id}-rate-err` : undefined}
+                />
+                <span aria-hidden="true">%</span>
+              </div>
+              {show("rate") && (
+                <p className={ui.error} id={`${id}-rate-err`} role="alert">
+                  {errors.rate}
+                </p>
+              )}
+            </div>
+            <fieldset className={ui.group}>
+              <legend className={ui.legend}>How often the rate applies</legend>
+              <div className={ui.seg}>
+                {PERS.map((p) => (
+                  <label key={p}>
+                    <input type="radio" name={`${id}-per`} checked={per === p} onChange={() => setPer(p)} />
+                    <span>{PER_LABEL[p]}</span>
+                  </label>
+                ))}
+              </div>
+            </fieldset>
+            <p className={ui.note} aria-live="polite">
+              {interestExample(kid?.name ?? (name.trim() || "your child"), kid ? Math.max(0, balanceOf(state, kid.id)) : 0, rateNum, per)}
+            </p>
+          </div>
+        ) : null}
+        <p className={ui.hint}>Meant for older kids. Interest is added once a day, the next time they open their jar.</p>
+      </fieldset>
+
       <div className={ui.stack}>
         <Button type="submit" variant="ok" size="lg">
           {submitLabel}
@@ -230,4 +309,13 @@ export function KidForm({
       </div>
     </form>
   );
+}
+
+/** Plain-language example from the current balance, e.g. "On Mia's $12.50 that is about 2c a day." */
+function interestExample(name: string, balance: number, rate: number | null, per: InterestPer): string {
+  if (rate === null || rateError(rate, per)) return "Enter a rate to see an example.";
+  if (balance <= 0) return `${name}'s jar is empty right now. Once there is money in it, it will grow ${formatRate(rate)}% ${PER_LABEL[per]}.`;
+  const perDay = balance * dailyRate({ ratePercent: rate, per });
+  const text = perDay < 1 ? "less than 1c a day" : `about ${formatShort(Math.round(perDay))} a day`;
+  return `On ${name}'s ${formatCents(balance)} that is ${text}.`;
 }

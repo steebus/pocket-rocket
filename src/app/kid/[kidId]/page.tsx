@@ -1,25 +1,47 @@
 "use client";
 
 import { motion, useReducedMotion } from "motion/react";
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Mascot } from "@/components/art/Mascot";
 import { BalanceHero } from "@/components/kid/BalanceHero";
 import { Jar } from "@/components/kid/Jar";
+import { InterestCelebration } from "@/components/kid/InterestCelebration";
 import { JobCard } from "@/components/kid/JobCard";
 import { useKid } from "@/components/kid/KidContext";
 import { useJarStory } from "@/components/kid/useJarStory";
+import { formatRate, interestDue, kidInterest, PER_EVERY } from "@/lib/interest";
 import { balanceOf, jobsForKid } from "@/lib/selectors";
+import { sound } from "@/lib/sound";
 import { usePocket } from "@/lib/store";
 import styles from "./page.module.css";
 
 export default function KidHome() {
   const kid = useKid();
-  const { state } = usePocket();
+  const { state, ready, actions } = usePocket();
   const reduce = useReducedMotion();
 
-  const balance = Math.max(0, balanceOf(state, kid.id));
+  // Interest is paid once as the screen opens (the ref also keeps React strict mode's double effect from paying twice).
+  // If at least 1c was paid, the celebration runs first; the jar is kept at its old balance until it is dismissed,
+  // so the jar story then drops exactly those coins and counts up from what the child last saw.
+  const [party, setParty] = useState<{ cents: number; days: number; before: number } | null>(null);
+  const paid = useRef(false);
+  useEffect(() => {
+    if (!ready || paid.current) return;
+    paid.current = true;
+    const due = interestDue(state, kid.id, Date.now());
+    if (due.days <= 0) return;
+    const before = Math.max(0, balanceOf(state, kid.id));
+    actions.payInterest(kid.id);
+    if (due.cents >= 1) {
+      setParty({ cents: due.cents, days: due.days, before });
+      sound.cheer();
+    }
+  }, [ready, state, kid.id, actions]);
+
+  const balance = Math.max(0, balanceOf(state, kid.id) - (party?.cents ?? 0));
   const story = useJarStory(kid.id, balance, kid.goal);
   const reached = !!kid.goal && balance >= kid.goal.priceCents;
+  const interest = kidInterest(kid);
 
   // Jobs to do come first when the screen opens; cards then stay put while the child claims them.
   const rank = useRef<Map<string, number>>(new Map());
@@ -32,11 +54,16 @@ export default function KidHome() {
 
   return (
     <div className={styles.home}>
+      {party && <InterestCelebration kid={kid} cents={party.cents} days={party.days} before={party.before} onDone={() => setParty(null)} />}
       <section className={styles.money} aria-labelledby="jar-title">
         <h1 id="jar-title" className={styles.sr}>
           {kid.name}&apos;s jar
         </h1>
-        <BalanceHero shown={story.shown} target={balance} />
+        <BalanceHero
+          shown={story.shown}
+          target={balance}
+          note={interest ? `Grows ${formatRate(interest.ratePercent)}% ${PER_EVERY[interest.per]}` : undefined}
+        />
         <Jar
           pileCoins={story.pileCoins}
           drop={story.drop}

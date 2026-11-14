@@ -56,6 +56,7 @@ export default function KidPage() {
         pic: job ? <JobIcon id={job.icon} size={36} /> : <Icon name="coin" size={30} />,
       };
     }
+    if (t.type === "interest") return { title: "Interest", sub: t.note, pic: <Icon name="sprout" size={30} strokeWidth={3} /> };
     if (t.type === "gift") return { title: "Gift", sub: t.note, pic: <Icon name="gift" size={30} /> };
     return { title: "Spent", sub: t.note, pic: <Icon name="cart" size={30} /> };
   };

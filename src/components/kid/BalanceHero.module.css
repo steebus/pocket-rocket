@@ -38,3 +38,13 @@
 .sizer {
   font-variant-numeric: proportional-nums;
 }
+
+/* Quiet: smaller and lighter than the label so the balance stays the biggest thing. */
+.note {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 1rem;
+  font-weight: var(--w-label);
+  opacity: 0.8;
+}
