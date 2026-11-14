@@ -1,0 +1,106 @@
+.jar {
+  container-type: inline-size;
+  position: relative;
+  width: 100%;
+  padding-top: 18px;
+}
+
+.lid {
+  position: absolute;
+  top: 0;
+  left: 7cqw;
+  right: 7cqw;
+  height: 24px;
+  background: var(--coral);
+  border: var(--line-lg) solid var(--ink);
+  border-radius: 10px;
+  z-index: 3;
+}
+
+.glass {
+  position: relative;
+  height: calc(var(--h) * 1cqw);
+  background: var(--glass);
+  border: var(--line-lg) solid var(--ink);
+  border-radius: 26px 26px 34px 34px;
+  z-index: 1;
+}
+
+.shine {
+  position: absolute;
+  top: 22px;
+  left: 12px;
+  width: 9px;
+  height: calc(var(--h) * 0.34cqw);
+  border-radius: 9px;
+  background: var(--white);
+}
+
+.line {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: calc(var(--y) * 1cqw);
+  border-top: var(--line-sm) dashed var(--ink);
+  z-index: 1;
+}
+
+/* Coins fall in from above the jar, so only the top edge of this layer is left unclipped. */
+.layer {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  clip-path: inset(-100vh 0 0 0 round 0 0 28px 28px);
+  pointer-events: none;
+}
+
+.coin {
+  position: absolute;
+  width: calc(11.2 * 1cqw);
+  height: calc(11.2 * 1cqw);
+  display: block;
+}
+
+.tag {
+  position: absolute;
+  right: 10px;
+  bottom: calc(var(--y) * 1cqw + 8px);
+  z-index: 5;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 12px 3px 6px;
+  background: var(--white);
+  border: var(--line-sm) solid var(--ink);
+  border-radius: var(--r-pill);
+  font-weight: var(--w-display);
+  font-size: 1.15rem;
+  line-height: 1;
+}
+
+.tag[data-reached="yes"] {
+  background: var(--gold);
+}
+
+.price {
+  font-variant-numeric: tabular-nums;
+}
+
+.burst {
+  position: absolute;
+  left: 50%;
+  bottom: calc(var(--y) * 1cqw + 14px);
+  width: 0;
+  height: 0;
+  z-index: 6;
+  pointer-events: none;
+}
+
+.particle {
+  position: absolute;
+  left: -4cqw;
+  top: -4cqw;
+  width: 8cqw;
+  height: 8cqw;
+  display: block;
+}

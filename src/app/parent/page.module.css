@@ -1,0 +1,78 @@
+.dash {
+  display: grid;
+  gap: 28px;
+  align-items: start;
+}
+
+.jobPic {
+  flex: none;
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+}
+
+.waitRow {
+  padding-bottom: 12px;
+}
+
+.kidRow {
+  display: grid;
+  gap: 10px;
+  padding: 10px 12px 14px;
+  background: var(--white);
+  border: var(--line-sm) solid var(--ink);
+  border-radius: var(--r-sm);
+}
+
+.kidTop {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.kidLink {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 52px;
+  text-decoration: none;
+  border-radius: 12px;
+}
+
+.kidLink:hover .kidName {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.kidName {
+  display: block;
+  font-size: 19px;
+  font-weight: var(--w-display);
+  line-height: 1.15;
+  overflow-wrap: anywhere;
+}
+
+.kidActs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.kidActs button {
+  width: 100%;
+}
+
+.addKid {
+  justify-self: start;
+}
+
+@media (min-width: 760px) {
+  .dash {
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
+  }
+}

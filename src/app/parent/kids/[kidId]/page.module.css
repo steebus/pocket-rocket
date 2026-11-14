@@ -1,0 +1,82 @@
+.summary {
+  display: grid;
+  gap: 14px;
+  padding: 14px;
+  border: var(--line-lg) solid var(--ink);
+  border-radius: var(--r-md);
+  background: var(--kid-ground);
+}
+
+.who {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-width: 0;
+}
+
+.bal {
+  font-size: 34px;
+  font-weight: var(--w-display);
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+}
+
+.acts {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  padding-bottom: 5px;
+}
+
+.acts button {
+  width: 100%;
+}
+
+.hRow {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.hPic {
+  flex: none;
+  width: 36px;
+  height: 36px;
+  display: grid;
+  place-items: center;
+}
+
+.hRow2 {
+  padding: 8px 12px;
+}
+
+.date {
+  display: block;
+  font-size: 13px;
+  opacity: 0.8;
+}
+
+.plus,
+.minus {
+  flex: none;
+  font-size: 18px;
+  font-weight: var(--w-display);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.more {
+  justify-self: start;
+}
+
+.danger {
+  display: grid;
+  gap: 12px;
+  padding-top: 8px;
+  border-top: var(--line-sm) solid var(--ink);
+}
+
+.saved {
+  font-weight: var(--w-label);
+}

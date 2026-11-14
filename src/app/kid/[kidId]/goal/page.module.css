@@ -1,0 +1,194 @@
+.page {
+  display: grid;
+  gap: 26px;
+  min-width: 0;
+}
+
+.card {
+  display: grid;
+  gap: 14px;
+  justify-items: center;
+  padding: 18px 16px 20px;
+  background: var(--white);
+  border: var(--line-lg) solid var(--ink);
+  border-radius: var(--r-lg);
+  box-shadow: var(--press);
+  text-align: center;
+  min-width: 0;
+}
+
+.say {
+  display: grid;
+  justify-items: center;
+  gap: 8px;
+}
+
+.picBtn {
+  position: relative;
+  padding: 4px 4px 0;
+  background: none;
+  border: 0;
+  color: var(--ink);
+  border-radius: var(--r-md);
+}
+
+.nameBtn {
+  background: none;
+  border: 0;
+  padding: 0 4px;
+  min-height: var(--tap);
+  color: var(--ink);
+  font: inherit;
+  font-weight: inherit;
+  border-radius: var(--r-md);
+}
+
+.pic {
+  width: clamp(130px, 40vw, 190px);
+  aspect-ratio: 1;
+  display: block;
+}
+
+.pic svg {
+  width: 100%;
+  height: 100%;
+}
+
+.name {
+  font-size: clamp(2.4rem, 11vw, 3.4rem);
+}
+
+.speaker {
+  position: absolute;
+  top: 0;
+  right: -24px;
+  width: 46px;
+  height: 46px;
+  display: grid;
+  place-items: center;
+  background: var(--tint-gold);
+  border: var(--line-sm) solid var(--ink);
+  border-radius: 50%;
+}
+
+.price {
+  display: block;
+}
+
+.priceChip {
+  display: inline-block;
+  padding: 6px 18px;
+  background: var(--gold);
+  border: var(--line-sm) solid var(--ink);
+  border-radius: var(--r-pill);
+  font-size: 1.7rem;
+  font-weight: var(--w-display);
+  line-height: 1.1;
+}
+
+.left {
+  display: grid;
+  gap: 8px;
+  justify-items: center;
+}
+
+.leftNum {
+  font-size: clamp(2.6rem, 13vw, 3.8rem);
+  font-weight: var(--w-display);
+  line-height: 1;
+}
+
+.leftNum span {
+  font-size: 0.6em;
+}
+
+.saved {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 1.4rem;
+  font-weight: var(--w-label);
+}
+
+.win {
+  display: grid;
+  gap: 6px;
+  padding: 14px 18px;
+  background: var(--gold);
+  border: var(--line-sm) solid var(--ink);
+  border-radius: var(--r-md);
+  font-size: 1.35rem;
+  font-weight: var(--w-label);
+}
+
+.winTitle {
+  font-size: 2.2rem;
+  font-weight: var(--w-display);
+  line-height: 1;
+}
+
+.jarBox {
+  display: grid;
+  gap: 12px;
+  align-content: start;
+  min-width: 0;
+}
+
+.hint {
+  text-align: center;
+  font-size: 1.25rem;
+  font-weight: var(--w-label);
+}
+
+.none {
+  display: grid;
+  justify-items: center;
+  gap: 16px;
+  padding: 28px 8px;
+  text-align: center;
+}
+
+.none h1 {
+  font-size: clamp(2.2rem, 10vw, 3.2rem);
+  max-width: 14ch;
+}
+
+.none p {
+  max-width: 24ch;
+  font-size: 1.5rem;
+  font-weight: var(--w-label);
+}
+
+.noneFace {
+  width: 150px;
+  height: 150px;
+  display: block;
+}
+
+.noneFace svg {
+  width: 100%;
+  height: 100%;
+}
+
+.gift {
+  display: grid;
+  place-items: center;
+  width: 96px;
+  height: 96px;
+  background: var(--tint-violet);
+  border: var(--line-lg) solid var(--ink);
+  border-radius: var(--r-lg);
+  box-shadow: var(--press);
+}
+
+@media (min-width: 720px) {
+  .page {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
+    gap: 36px;
+    align-items: start;
+  }
+
+  .none {
+    padding-top: 56px;
+  }
+}

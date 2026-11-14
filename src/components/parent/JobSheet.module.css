@@ -1,0 +1,17 @@
+.nameRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.tileBody svg {
+  flex: none;
+}
+
+.none {
+  padding: 10px 12px;
+  background: var(--tint-gold);
+  border: var(--line-sm) solid var(--ink);
+  border-radius: 12px;
+  font-weight: var(--w-label);
+}

@@ -1,0 +1,11 @@
+.goalBox {
+  display: grid;
+  gap: 16px;
+  padding-left: 12px;
+  border-left: var(--line-lg) solid var(--ink);
+}
+
+.addGoal {
+  justify-self: start;
+}
+

@@ -1,0 +1,46 @@
+.medal {
+  position: relative;
+  width: 92px;
+  height: 92px;
+  display: grid;
+  place-items: center;
+  rotate: var(--tilt);
+  border-radius: 50%;
+  background: var(--fill);
+  border: var(--line-lg) solid var(--ink);
+  box-shadow: 0 4px 0 var(--ink), inset 0 0 0 5px var(--fill), inset 0 0 0 8px var(--ink);
+}
+
+.medal[data-earned="no"] {
+  background: rgba(255, 255, 255, 0.55);
+  border: var(--line-sm) dashed var(--ink);
+  box-shadow: none;
+  rotate: 0deg;
+}
+
+.medal[data-earned="no"] > * {
+  opacity: 0.4;
+}
+
+.glyph {
+  position: relative;
+  display: grid;
+  place-items: center;
+}
+
+.over {
+  position: absolute;
+  top: 56%;
+  left: 50%;
+  translate: -50% -50%;
+  font-size: 1.35rem;
+  font-weight: var(--w-display);
+  line-height: 1;
+}
+
+.text {
+  font-size: 1.85rem;
+  font-weight: var(--w-display);
+  line-height: 1;
+  letter-spacing: -0.02em;
+}

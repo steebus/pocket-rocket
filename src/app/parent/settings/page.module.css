@@ -1,0 +1,16 @@
+.pins {
+  display: grid;
+  gap: 14px;
+  grid-template-columns: 1fr 1fr;
+}
+
+.pins input {
+  letter-spacing: 0.3em;
+  font-variant-numeric: tabular-nums;
+}
+
+@media (max-width: 400px) {
+  .pins {
+    grid-template-columns: 1fr;
+  }
+}

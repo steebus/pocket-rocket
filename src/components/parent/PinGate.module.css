@@ -1,0 +1,145 @@
+.screen {
+  min-height: 100dvh;
+  background: var(--white);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+  padding: max(28px, env(safe-area-inset-top, 0px)) var(--gutter) max(24px, env(safe-area-inset-bottom, 0px));
+  font-size: 16px;
+}
+
+.lock {
+  display: grid;
+  place-items: center;
+  width: 72px;
+  height: 72px;
+  margin-top: 8px;
+  background: var(--mint);
+  border: var(--line-lg) solid var(--ink);
+  border-radius: var(--r-md);
+}
+
+.title {
+  font-size: 32px;
+  text-align: center;
+}
+
+.dots {
+  display: flex;
+  gap: 16px;
+}
+
+.dot {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: var(--line-sm) solid var(--ink);
+  background: var(--white);
+  transition: background 120ms ease-out;
+}
+
+.on {
+  background: var(--ink);
+}
+
+.shake {
+  animation: shake 360ms ease-in-out;
+}
+
+@keyframes shake {
+  0%,
+  100% {
+    translate: 0;
+  }
+  18% {
+    translate: -12px;
+  }
+  38% {
+    translate: 11px;
+  }
+  58% {
+    translate: -8px;
+  }
+  78% {
+    translate: 5px;
+  }
+}
+
+.msg {
+  min-height: 44px;
+  display: grid;
+  align-items: center;
+  max-width: 320px;
+  text-align: center;
+  font-weight: var(--w-label);
+}
+
+.bad {
+  padding: 6px 12px;
+  background: var(--tint-coral);
+  border: var(--line-sm) solid var(--ink);
+  border-radius: 12px;
+}
+
+.pad {
+  width: 100%;
+  max-width: 320px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+.pad button.key {
+  min-height: 68px;
+  padding: 0;
+  font-size: 30px;
+  font-weight: var(--w-display);
+  font-variant-numeric: tabular-nums;
+  border-radius: var(--r-md);
+}
+
+.gap {
+  display: block;
+}
+
+.back {
+  margin-top: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 44px;
+  padding-top: 8px;
+  font-weight: var(--w-label);
+  text-decoration: none;
+}
+
+.back:hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.demo {
+  font-size: 14px;
+  opacity: 0.8;
+}
+
+@media (max-height: 720px) {
+  .screen {
+    gap: 10px;
+  }
+
+  .pad button.key {
+    min-height: 58px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .shake {
+    animation: none;
+  }
+
+  .dot {
+    transition: none;
+  }
+}

@@ -1,0 +1,123 @@
+.home {
+  display: grid;
+  gap: 22px;
+  min-width: 0;
+}
+
+.sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.money {
+  display: grid;
+  gap: 14px;
+  min-width: 0;
+}
+
+.jobs {
+  display: grid;
+  gap: 18px;
+  min-width: 0;
+}
+
+.heading {
+  font-size: 1.9rem;
+  margin-bottom: 12px;
+}
+
+/* Phone: one scrolling row that snaps, with the next card peeking in. */
+.row {
+  display: flex;
+  gap: 14px;
+  margin: 0 calc(-1 * var(--gutter));
+  padding: 2px var(--gutter) 14px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-padding-inline: var(--gutter);
+  overscroll-behavior-x: contain;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+
+.row::-webkit-scrollbar {
+  display: none;
+}
+
+.row > li {
+  align-self: stretch;
+}
+
+.happy {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 12px 16px;
+  background: var(--white);
+  border: var(--line-lg) solid var(--ink);
+  border-radius: var(--r-lg);
+  box-shadow: var(--press);
+  font-size: 1.6rem;
+  font-weight: var(--w-display);
+  line-height: 1.1;
+}
+
+.happy span {
+  display: block;
+  margin-top: 4px;
+  font-size: 1.2rem;
+  font-weight: var(--w-label);
+}
+
+.happy > svg {
+  flex: none;
+}
+
+.happyFace {
+  flex: none;
+  width: 84px;
+  height: 84px;
+  display: block;
+}
+
+.happyFace svg {
+  width: 100%;
+  height: 100%;
+}
+
+@media (min-width: 720px) {
+  .home {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr);
+    gap: 36px;
+    align-items: start;
+  }
+
+  .money {
+    position: sticky;
+    top: 16px;
+    gap: 22px;
+  }
+
+  .jobs {
+    gap: 26px;
+  }
+
+  .row {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    margin: 0;
+    padding: 0 0 8px;
+    overflow: visible;
+    gap: 18px;
+  }
+}
+
+@media (min-width: 1100px) {
+  .row {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}

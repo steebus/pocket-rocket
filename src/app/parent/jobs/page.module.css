@@ -1,0 +1,54 @@
+.rowBtn {
+  position: relative;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 64px;
+  padding: 10px 12px;
+  background: var(--white);
+  color: var(--ink);
+  border: var(--line-sm) solid var(--ink);
+  border-radius: var(--r-sm);
+  text-align: left;
+  font: inherit;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+.rowBtn:hover {
+  background: var(--glass);
+}
+
+.pic {
+  flex: none;
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+}
+
+.faces {
+  flex: none;
+  display: flex;
+  max-width: 120px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 2px;
+}
+
+.faces svg {
+  width: 28px;
+  height: 28px;
+}
+
+.edit {
+  flex: none;
+  display: none;
+}
+
+@media (min-width: 600px) {
+  .edit {
+    display: block;
+  }
+}

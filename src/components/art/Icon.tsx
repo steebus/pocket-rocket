@@ -2,7 +2,7 @@ import { Svg48 } from "./Svg";
 
 export type IconName =
   | "check" | "x" | "plus" | "minus" | "star" | "flame" | "lock" | "unlock" | "kids" | "list" | "cog"
-  | "coin" | "back" | "speaker" | "clock" | "gift" | "cart" | "trash" | "edit" | "home" | "target";
+  | "coin" | "back" | "speaker" | "clock" | "gift" | "cart" | "trash" | "edit" | "home" | "target" | "jar";
 
 /** UI glyphs. Stroke follows `currentColor` (set `color` on the parent); star, flame and coin carry their own fill. */
 export function Icon({
@@ -92,6 +92,14 @@ export function Icon({
       )}
       {name === "edit" && <path d="M8 40l2-9L32 9l7 7-22 22zM27 14l7 7" />}
       {name === "home" && <path d="M6 23L24 7l18 16M11 19v22h26V19M20 41V29h8v12" />}
+      {name === "jar" && (
+        <>
+          <rect x="12" y="5" width="24" height="9" rx="3" fill="#ff7a59" />
+          <path d="M14 14v2c-6 3-7 7-7 12v9a6 6 0 0 0 6 6h22a6 6 0 0 0 6-6v-9c0-5-1-9-7-12v-2" />
+          <circle cx="18" cy="36" r="4.5" fill="#ffc83d" />
+          <circle cx="30" cy="36" r="4.5" fill="#ffc83d" />
+        </>
+      )}
       {name === "target" && (
         <>
           <circle cx="24" cy="24" r="18" />
