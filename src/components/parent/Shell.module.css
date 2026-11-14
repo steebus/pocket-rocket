@@ -101,3 +101,21 @@
     transition: none;
   }
 }
+
+/* Nothing in the parent chrome ever prints: only the page content does. */
+@media print {
+  .bar,
+  .nav {
+    display: none !important;
+  }
+
+  .app {
+    min-height: 0;
+  }
+
+  .main {
+    max-width: none;
+    margin: 0;
+    padding: 0;
+  }
+}

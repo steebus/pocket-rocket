@@ -182,6 +182,7 @@
 @media (min-width: 720px) {
   .page {
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    grid-template-rows: auto 1fr;
     gap: 28px 36px;
     align-items: start;
   }

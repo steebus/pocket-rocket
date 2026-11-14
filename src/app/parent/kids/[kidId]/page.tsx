@@ -8,6 +8,7 @@ import { JobIcon } from "@/components/art/JobIcon";
 import { Mascot } from "@/components/art/Mascot";
 import { KidForm } from "@/components/parent/KidForm";
 import { signed } from "@/components/parent/labels";
+import { PrinterIcon } from "@/components/parent/print/PrintIcons";
 import { MoneySheet, type MoneyMode } from "@/components/parent/MoneySheet";
 import ui from "@/components/parent/ui.module.css";
 import { BalanceNumber } from "@/components/ui/BalanceNumber";
@@ -83,6 +84,10 @@ export default function KidPage() {
             <Icon name="minus" size={18} />
             Spend
           </button>
+          <Link href={`/parent/kids/${kid.id}/print`} className={[ui.smallBtn, styles.printLink].join(" ")}>
+            <PrinterIcon size={20} />
+            Print a chart
+          </Link>
         </div>
       </section>
 

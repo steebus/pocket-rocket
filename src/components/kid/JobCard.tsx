@@ -85,7 +85,7 @@ export function JobCard({ job, status, kidId, index }: { job: Job; status: JobSt
           transition={{ type: "spring", stiffness: 380, damping: 16 }}
         >
           <Icon name="clock" size={26} />
-          <span>Waiting for a grown-up</span>
+          <span>Waiting for a <span style={{ whiteSpace: "nowrap" }}>grown-up</span></span>
         </motion.p>
       )}
       {status === "done" && (

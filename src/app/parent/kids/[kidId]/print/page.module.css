@@ -1,0 +1,103 @@
+.page {
+  display: grid;
+  gap: 16px;
+  width: 100%;
+}
+
+.toolbar {
+  display: grid;
+  gap: 10px;
+  max-width: 720px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.printBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 48px;
+  padding: 10px 22px;
+  border: var(--line-sm) solid var(--ink);
+  border-radius: var(--r-pill);
+  background: var(--gold);
+  color: var(--ink);
+  box-shadow: var(--press);
+  font-weight: var(--w-label);
+  font-size: 18px;
+  line-height: 1;
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: translate 90ms ease-out, box-shadow 90ms ease-out;
+}
+
+.printBtn:active {
+  translate: 0 5px;
+  box-shadow: 0 0 0 var(--ink);
+}
+
+.help {
+  font-size: 15px;
+  opacity: 0.85;
+  padding-bottom: 5px;
+}
+
+/* The preview: the sheets are laid out at true A4 size and scaled down to the screen width. */
+.stage {
+  width: 100%;
+  overflow: hidden;
+}
+
+.scaler {
+  width: 210mm;
+  display: grid;
+  gap: 8mm;
+  transform-origin: top left;
+}
+
+.scaler > * {
+  border: 2px solid var(--ink);
+}
+
+@media (min-width: 1000px) {
+  .stage {
+    display: flex;
+    justify-content: center;
+  }
+}
+
+@media print {
+  .page {
+    display: block;
+  }
+
+  .toolbar {
+    display: none !important;
+  }
+
+  .stage {
+    overflow: visible;
+    height: auto !important;
+    display: block;
+  }
+
+  .scaler {
+    width: auto;
+    display: block;
+    transform: none !important;
+    height: auto !important;
+  }
+
+  .scaler > * {
+    border: 0;
+  }
+}

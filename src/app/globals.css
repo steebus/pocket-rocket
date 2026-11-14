@@ -160,3 +160,10 @@ textarea::placeholder {
     scroll-behavior: auto !important;
   }
 }
+
+@media print {
+  body {
+    background: var(--white);
+    min-height: 0;
+  }
+}

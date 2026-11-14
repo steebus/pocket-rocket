@@ -80,3 +80,7 @@
 .saved {
   font-weight: var(--w-label);
 }
+
+.printLink {
+  grid-column: 1 / -1;
+}
