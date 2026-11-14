@@ -1,0 +1,84 @@
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-height: 48px;
+  padding: 10px 22px;
+  border: var(--line-lg) solid var(--ink);
+  border-radius: var(--r-sm);
+  background: var(--white);
+  color: var(--ink);
+  font-family: var(--font);
+  font-weight: var(--w-label);
+  font-size: 18px;
+  line-height: 1;
+  text-decoration: none;
+  box-shadow: var(--press);
+  cursor: pointer;
+  user-select: none;
+  touch-action: manipulation;
+  transition: translate 90ms ease-out, box-shadow 90ms ease-out;
+}
+
+.pill {
+  border-radius: var(--r-pill);
+}
+
+.primary {
+  background: var(--violet);
+  color: var(--white);
+}
+
+.plain {
+  background: var(--white);
+}
+
+.danger {
+  background: var(--coral);
+}
+
+.ok {
+  background: var(--ok);
+}
+
+.md {
+  min-height: 48px;
+}
+
+.lg {
+  min-height: var(--tap);
+  padding: 14px 28px;
+  font-size: 20px;
+}
+
+.kid {
+  min-height: 72px;
+  padding: 16px 32px;
+  font-size: 24px;
+  font-weight: var(--w-display);
+  border-radius: var(--r-md);
+}
+
+.kid.pill {
+  border-radius: var(--r-pill);
+}
+
+.btn:active:not(:disabled):not([aria-disabled="true"]) {
+  translate: 0 5px;
+  box-shadow: 0 0 0 var(--ink);
+}
+
+.btn:disabled,
+.btn[aria-disabled="true"] {
+  opacity: 0.5;
+  cursor: not-allowed;
+  box-shadow: 0 0 0 var(--ink);
+  translate: 0 5px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .btn {
+    transition: none;
+  }
+}

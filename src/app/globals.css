@@ -1,0 +1,162 @@
+/* Pocket Rocket design tokens: "Money Jar". Flat fills, thick ink outlines, one hard shadow on pressables. */
+
+:root {
+  /* colour */
+  --ink: #12312a;
+  --mint: #b8f2d0;
+  --glass: #eafff5;
+  --gold: #ffc83d;
+  --gold-shade: #e79a12;
+  --coral: #ff7a59;
+  --violet: #7b5cff;
+  --ok: #3ddc84;
+  --tint-coral: #ffd9cf;
+  --tint-violet: #dcd3ff;
+  --tint-gold: #fff1c2;
+  --white: #ffffff;
+
+  /* per-kid theme; screens override these from KID_COLORS */
+  --kid: #ff7eb6;
+  --kid-ground: #ffe0ee;
+
+  /* shape */
+  --r-sm: 16px;
+  --r-md: 24px;
+  --r-lg: 34px;
+  --r-pill: 999px;
+  --line-lg: 4px;
+  --line-sm: 3px;
+  --press: 0 5px 0 var(--ink);
+
+  /* type */
+  --font: "Grandstander Variable", "Comic Sans MS", system-ui, sans-serif;
+  --w-body: 500;
+  --w-label: 700;
+  --w-display: 900;
+
+  /* layout */
+  --gutter: 16px;
+  --tap: 56px;
+
+  color-scheme: light;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  caret-color: var(--ink);
+  accent-color: var(--violet);
+}
+
+body {
+  margin: 0;
+  min-height: 100dvh;
+  background: var(--mint);
+  color: var(--ink);
+  font-family: var(--font);
+  font-weight: var(--w-body);
+  font-size: 18px;
+  line-height: 1.35;
+  padding-left: env(safe-area-inset-left, 0px);
+  padding-right: env(safe-area-inset-right, 0px);
+  -webkit-tap-highlight-color: transparent;
+  text-rendering: optimizeLegibility;
+}
+
+h1,
+h2,
+h3,
+h4,
+p {
+  margin: 0;
+}
+
+h1,
+h2,
+h3 {
+  font-weight: var(--w-display);
+  line-height: 1.05;
+  text-wrap: balance;
+}
+
+b,
+strong,
+label,
+legend,
+th {
+  font-weight: var(--w-label);
+}
+
+a {
+  color: inherit;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+  color: inherit;
+  caret-color: var(--ink);
+}
+
+button {
+  cursor: pointer;
+}
+
+img,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+/* money */
+.money,
+[data-money] {
+  font-variant-numeric: tabular-nums;
+}
+
+/* text selection and focus */
+::selection {
+  background: var(--gold);
+  color: var(--ink);
+}
+
+:focus-visible {
+  outline: 3px solid var(--ink);
+  outline-offset: 3px;
+}
+
+/* inputs share one look */
+input,
+select,
+textarea {
+  background: var(--white);
+  border: var(--line-sm) solid var(--ink);
+  border-radius: var(--r-sm);
+  padding: 12px 14px;
+  min-height: 48px;
+  font-weight: var(--w-label);
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: var(--ink);
+  opacity: 0.55;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
