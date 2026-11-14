@@ -1,0 +1,39 @@
+/* Eyes are their own groups so they can blink, squeeze shut and go wide. Everything is transform / opacity. */
+.eye {
+  transform-box: fill-box;
+  transform-origin: 50% 50%;
+  transition: transform 110ms ease-out;
+}
+
+.pupil {
+  transition: transform 160ms ease-out;
+}
+
+/* Closed-eye strokes sit hidden until a blink or a happy face asks for them. */
+.shut,
+.happy {
+  opacity: 0;
+}
+
+.svg[data-look="happy"] .eye {
+  opacity: 0;
+}
+
+.svg[data-look="happy"] .happy {
+  opacity: 1;
+}
+
+.svg[data-look="wide"] .eye {
+  transform: scale(1.15);
+}
+
+.svg[data-gaze="down"] .pupil {
+  transform: translate(0, 1.5px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .eye,
+  .pupil {
+    transition: none;
+  }
+}

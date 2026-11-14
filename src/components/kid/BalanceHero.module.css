@@ -33,10 +33,12 @@
   pointer-events: none;
 }
 
-/* The hero number is set proportionally so the digits sit tight; the sizer matches. */
+/* The hero number is set proportionally so the digits sit tight; the sizer matches.
+   Each character is its own box (so it can hop), so kerning is off in both to keep the measured width true. */
 .number span,
 .sizer {
   font-variant-numeric: proportional-nums;
+  font-kerning: none;
 }
 
 /* Quiet: smaller and lighter than the label so the balance stays the biggest thing. */

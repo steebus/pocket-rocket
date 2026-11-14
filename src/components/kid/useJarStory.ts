@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { kidSignals } from "@/lib/kidSignals";
 import { sound } from "@/lib/sound";
 import type { Goal } from "@/lib/types";
 import { coinsFor } from "./jarMath";
@@ -101,6 +102,7 @@ export function useJarStory(kidId: string, cents: number, goal?: Goal) {
     handled.current = cents;
     writeSeen(kidId, cents);
     if (prefersReduced()) {
+      if (cents > from) kidSignals.emit("coins");
       if (crosses(goalRef.current, from, cents)) sound.cheer();
       setS((p) => ({ ...p, shown: cents, pileCents: cents, story: null, celebrate: crosses(goalRef.current, from, cents) ? p.celebrate + 1 : p.celebrate }));
       return;
@@ -127,6 +129,7 @@ export function useJarStory(kidId: string, cents: number, goal?: Goal) {
       for (let k = 0; k < n; k++) {
         at(120 + k * STAGGER + LANDS_AFTER, () => {
           sound.coin();
+          if (k === 0) kidSignals.emit("coins");
           setS((p) => ({ ...p, shown: lerp(k, n) }));
         });
       }

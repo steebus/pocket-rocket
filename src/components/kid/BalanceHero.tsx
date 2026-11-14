@@ -40,7 +40,7 @@ export function BalanceHero({ shown, target, label = "in your jar", note }: { sh
   return (
     <div className={styles.hero}>
       <div ref={box} className={styles.number} style={size ? { fontSize: size } : undefined}>
-        <BalanceNumber cents={shown} />
+        <BalanceNumber cents={shown} lively waveOk={shown === target} />
         <span ref={sizer} className={styles.sizer} aria-hidden="true" data-money>
           {widest}
         </span>

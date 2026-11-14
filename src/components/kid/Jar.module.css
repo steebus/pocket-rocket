@@ -104,3 +104,83 @@
   height: 8cqw;
   display: block;
 }
+
+/* The whole jar is one big button: poke it and the pile jiggles. */
+.hit {
+  position: absolute;
+  inset: 0;
+  z-index: 7;
+  margin: 0;
+  padding: 0;
+  background: none;
+  border: 0;
+  border-radius: 30px;
+  color: inherit;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+.hit:focus-visible {
+  outline: 3px solid var(--ink);
+  outline-offset: 3px;
+}
+
+.sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* A glint: a flat white band sweeps across one coin, clipped to its face. */
+.glint {
+  position: absolute;
+  inset: 6.25%;
+  clip-path: circle(50%);
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.glint > i {
+  position: absolute;
+  top: -25%;
+  bottom: -25%;
+  left: 0;
+  width: 60%;
+  transform: translateX(-130%) skewX(-18deg);
+  animation: sweep 720ms cubic-bezier(0.4, 0, 0.2, 1) both;
+}
+
+.glint > i::before,
+.glint > i::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  background: var(--white);
+  opacity: 0.92;
+}
+
+.glint > i::before {
+  left: 0;
+  width: 46%;
+}
+
+.glint > i::after {
+  left: 62%;
+  width: 16%;
+}
+
+@keyframes sweep {
+  to {
+    transform: translateX(270%) skewX(-18deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .glint {
+    display: none;
+  }
+}

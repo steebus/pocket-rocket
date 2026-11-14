@@ -14,3 +14,8 @@
   clip-path: inset(50%);
   white-space: nowrap;
 }
+
+/* One character of a lively number. Inline-block so it can hop on its own; spacing stays whatever the parent sets. */
+.ch {
+  display: inline-block;
+}

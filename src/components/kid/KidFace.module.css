@@ -1,0 +1,25 @@
+.face {
+  width: 60px;
+  height: 60px;
+  flex: none;
+  display: block;
+}
+
+.face svg {
+  width: 100%;
+  height: 100%;
+}
+
+/* The inner box the happy hop moves, so it never fights the slow bob on .face. */
+.reactor {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+@media (min-width: 720px) {
+  .face {
+    width: 76px;
+    height: 76px;
+  }
+}

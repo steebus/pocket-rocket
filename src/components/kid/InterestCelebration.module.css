@@ -68,6 +68,12 @@
   max-width: 100%;
 }
 
+/* The global [data-money] rule sets tabular digits on this element, which spreads "+13c" out.
+   The big amount is a headline, not a column of figures: set it proportionally. */
+.amount[data-money] {
+  font-variant-numeric: proportional-nums;
+}
+
 .line {
   max-width: 24ch;
   font-size: clamp(1.3rem, 5.4vw, 1.6rem);

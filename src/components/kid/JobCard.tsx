@@ -1,10 +1,12 @@
 "use client";
 
 import { motion, useAnimate, useReducedMotion } from "motion/react";
+import { useEffect, useRef, useState } from "react";
 import { Icon } from "@/components/art/Icon";
 import { JobIcon } from "@/components/art/JobIcon";
 import { Button } from "@/components/ui/Button";
 import { Coin } from "@/components/ui/Coin";
+import { kidSignals } from "@/lib/kidSignals";
 import { formatShort } from "@/lib/money";
 import { sound } from "@/lib/sound";
 import { speak } from "@/lib/speak";
@@ -18,9 +20,25 @@ export function JobCard({ job, status, kidId, index }: { job: Job; status: JobSt
   const { actions } = usePocket();
   const reduce = useReducedMotion();
   const [scope, animate] = useAnimate();
+  const [speaking, setSpeaking] = useState(false);
+  const speakTimer = useRef(0);
+  useEffect(() => () => window.clearTimeout(speakTimer.current), []);
+
+  // The speaker pulses once while the name is being read out. A timer guards against a voice that never reports back.
+  function hear() {
+    window.clearTimeout(speakTimer.current);
+    const stop = () => {
+      window.clearTimeout(speakTimer.current);
+      setSpeaking(false);
+    };
+    if (!speak(job.name, stop)) return;
+    setSpeaking(true);
+    speakTimer.current = window.setTimeout(stop, 3500);
+  }
 
   function claim() {
     sound.pop();
+    kidSignals.emit("claim");
     actions.claimJob(kidId, job.id);
     if (!reduce && scope.current) {
       void animate(scope.current, { scaleX: [1, 1.07, 0.97, 1], scaleY: [1, 0.88, 1.04, 1] }, { duration: 0.55, ease: "easeOut" });
@@ -34,11 +52,11 @@ export function JobCard({ job, status, kidId, index }: { job: Job; status: JobSt
       data-status={status}
       style={{ ["--tint" as string]: status === "done" ? "var(--white)" : TINTS[index % TINTS.length] }}
     >
-      <button type="button" className={styles.say} onClick={() => speak(job.name)} aria-label={`Hear it: ${job.name}`}>
-        <span className={styles.speaker} aria-hidden="true">
+      <button type="button" className={styles.say} onClick={hear} aria-label={`Hear it: ${job.name}`}>
+        <span className={styles.speaker} data-speaking={speaking ? "yes" : undefined} aria-hidden="true">
           <Icon name="speaker" size={26} strokeWidth={4} />
         </span>
-        <span className={styles.pic}>
+        <span className={styles.pic} data-pic data-todo={status === "todo" ? "yes" : undefined}>
           <JobIcon id={job.icon} size="100%" />
           {status === "done" && (
             <motion.span

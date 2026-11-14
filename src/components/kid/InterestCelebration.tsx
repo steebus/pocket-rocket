@@ -4,6 +4,7 @@ import { useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
 import { Mascot } from "@/components/art/Mascot";
 import { Button } from "@/components/ui/Button";
+import { HopText } from "@/components/ui/HopText";
 import { KID_COLORS } from "@/lib/kidColors";
 import { formatCents, formatShort } from "@/lib/money";
 import type { Kid } from "@/lib/types";
@@ -131,7 +132,7 @@ export function InterestCelebration({
       >
         <div className={styles.art}>
           <span className={styles.mascot}>
-            <Mascot id={kid.mascot} color={kid.color} size="100%" />
+            <Mascot id={kid.mascot} color={kid.color} size="100%" alive />
           </span>
           <Sprout />
         </div>
@@ -139,7 +140,7 @@ export function InterestCelebration({
           Your money grew!
         </h2>
         <p className={styles.amount} style={{ ["--len" as string]: amount.length }} data-money aria-label={`${formatShort(cents)} more`}>
-          {amount}
+          <HopText text={amount} delay={700} />
         </p>
         <p id="grew-line" className={styles.line}>
           {line}

@@ -1,12 +1,14 @@
 "use client";
 
 import { motion, useReducedMotion } from "motion/react";
+import { useEffect, useRef, useState } from "react";
 import { GoalIcon } from "@/components/art/GoalIcon";
 import { Icon } from "@/components/art/Icon";
 import { Mascot } from "@/components/art/Mascot";
 import { Jar } from "@/components/kid/Jar";
 import { useKid } from "@/components/kid/KidContext";
 import { useJarStory } from "@/components/kid/useJarStory";
+import { useIdleLoop } from "@/lib/idle";
 import { formatCents, formatShort } from "@/lib/money";
 import { balanceOf } from "@/lib/selectors";
 import { speak } from "@/lib/speak";
@@ -20,19 +22,47 @@ export default function KidGoal() {
   const balance = Math.max(0, balanceOf(state, kid.id));
   const story = useJarStory(kid.id, balance, kid.goal);
 
+  // No goal yet: every so often the gift box gives a little shake and the character glances down at it,
+  // as if wondering what to save for. Both go back to rest.
+  const noneBox = useRef<HTMLDivElement>(null);
+  const gift = useRef<HTMLSpanElement>(null);
+  const [eyeing, setEyeing] = useState(false);
+  const eyeTimer = useRef(0);
+  useEffect(() => () => window.clearTimeout(eyeTimer.current), []);
+  useIdleLoop(
+    noneBox,
+    () => {
+      setEyeing(true);
+      window.clearTimeout(eyeTimer.current);
+      eyeTimer.current = window.setTimeout(() => setEyeing(false), 1500);
+      gift.current?.animate(
+        [
+          { translate: "0 0", rotate: "0deg", easing: "cubic-bezier(0.16, 1, 0.3, 1)" },
+          { translate: "0 -6px", rotate: "-7deg", offset: 0.22 },
+          { translate: "0 0", rotate: "6deg", offset: 0.42 },
+          { rotate: "-4deg", offset: 0.62 },
+          { rotate: "2deg", offset: 0.8 },
+          { translate: "0 0", rotate: "0deg" },
+        ],
+        { duration: 800, delay: 350, easing: "ease-in-out" },
+      );
+    },
+    { min: 6000, max: 9000, first: [3000, 5000], exclusive: 1300, enabled: !kid.goal },
+  );
+
   if (!kid.goal) {
     return (
-      <div className={styles.none}>
+      <div ref={noneBox} className={styles.none}>
         <motion.span
           className={styles.noneFace}
           animate={reduce ? undefined : { y: [0, -8, 0] }}
           transition={reduce ? undefined : { duration: 2.2, repeat: Infinity, ease: "easeInOut" }}
         >
-          <Mascot id={kid.mascot} color={kid.color} size="100%" />
+          <Mascot id={kid.mascot} color={kid.color} size="100%" alive gaze={eyeing ? "down" : undefined} />
         </motion.span>
         <h1>What are you saving for?</h1>
         <p>Ask a grown-up to pick something special for you to save up for.</p>
-        <span className={styles.gift} aria-hidden="true">
+        <span ref={gift} className={styles.gift} aria-hidden="true">
           <Icon name="gift" size={64} />
         </span>
       </div>

@@ -1,11 +1,11 @@
 "use client";
 
-import { motion, useReducedMotion } from "motion/react";
 import Link from "next/link";
 import { useParams, usePathname } from "next/navigation";
 import type { ReactNode } from "react";
 import { Icon, type IconName } from "@/components/art/Icon";
 import { Mascot } from "@/components/art/Mascot";
+import { KidFace } from "@/components/kid/KidFace";
 import { KidProvider } from "@/components/kid/KidContext";
 import { ButtonLink } from "@/components/ui/Button";
 import { KID_COLORS } from "@/lib/kidColors";
@@ -23,7 +23,6 @@ export default function KidLayout({ children }: { children: ReactNode }) {
   const { kidId } = useParams<{ kidId: string }>();
   const pathname = usePathname();
   const { state, ready } = usePocket();
-  const reduce = useReducedMotion();
   const kid = state.kids.find((k) => k.id === kidId);
 
   if (!ready) return <div className={styles.waiting} aria-hidden="true" />;
@@ -31,7 +30,7 @@ export default function KidLayout({ children }: { children: ReactNode }) {
   if (!kid) {
     return (
       <main className={styles.lost}>
-        <Mascot id="blob" color="sky" size={140} />
+        <Mascot id="blob" color="sky" size={140} alive />
         <h1>Hmm, I can&apos;t find that player.</h1>
         <p>Let&apos;s go back and tap your face.</p>
         <ButtonLink href="/" variant="primary" size="kid" pill>
@@ -54,18 +53,12 @@ export default function KidLayout({ children }: { children: ReactNode }) {
       >
         <header className={styles.top}>
           <Link href="/" className={styles.who} aria-label={`${kid.name}. Tap to pick who is playing`}>
-            <motion.span
-              className={styles.face}
-              animate={reduce ? undefined : { y: [0, -4, 0] }}
-              transition={reduce ? undefined : { duration: 2.6, repeat: Infinity, ease: "easeInOut" }}
-            >
-              <Mascot id={kid.mascot} color={kid.color} size="100%" />
-            </motion.span>
+            <KidFace kid={kid} />
             <span className={styles.name}>{kid.name}</span>
           </Link>
           {streak > 0 && (
             <Link href={`${base}/stuff`} className={styles.streak} aria-label={`${streak} day streak`}>
-              <Icon name="flame" size={28} strokeWidth={3.5} />
+              <Icon name="flame" size={28} strokeWidth={3.5} className={styles.flame} />
               <span data-money>{streak}</span>
             </Link>
           )}

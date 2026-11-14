@@ -2,14 +2,51 @@
 
 import { motion, useReducedMotion } from "motion/react";
 import Link from "next/link";
+import { useEffect, useRef, useState } from "react";
 import { Icon } from "@/components/art/Icon";
 import { Mascot } from "@/components/art/Mascot";
 import { ButtonLink } from "@/components/ui/Button";
 import { KID_COLORS } from "@/lib/kidColors";
 import { usePocket } from "@/lib/store";
+import type { Kid } from "@/lib/types";
 import styles from "./page.module.css";
 
 const MotionLink = motion.create(Link);
+
+/** One face to tap. The moment a finger lands, the character's eyes go wide; navigation is not held up. */
+function Tile({ kid, index, reduce }: { kid: Kid; index: number; reduce: boolean }) {
+  const [wide, setWide] = useState(false);
+  const timer = useRef(0);
+  useEffect(() => () => window.clearTimeout(timer.current), []);
+  const surprise = () => {
+    setWide(true);
+    window.clearTimeout(timer.current);
+    timer.current = window.setTimeout(() => setWide(false), 900);
+  };
+  return (
+    <MotionLink
+      href={`/kid/${kid.id}`}
+      className={styles.tile}
+      style={{ ["--tile" as string]: KID_COLORS[kid.color].main }}
+      whileTap={reduce ? undefined : { scaleX: 1.05, scaleY: 0.92 }}
+      transition={{ type: "spring", stiffness: 500, damping: 18 }}
+      aria-label={`${kid.name}, tap to play`}
+      onPointerDown={surprise}
+      onKeyDown={(e) => {
+        if (e.key === "Enter") surprise();
+      }}
+    >
+      <motion.span
+        className={styles.mascot}
+        animate={reduce ? undefined : { y: [0, -7, 0] }}
+        transition={reduce ? undefined : { duration: 2.4, repeat: Infinity, ease: "easeInOut", delay: index * 0.45 }}
+      >
+        <Mascot id={kid.mascot} color={kid.color} size="100%" alive look={wide ? "wide" : undefined} />
+      </motion.span>
+      <span className={styles.name}>{kid.name}</span>
+    </MotionLink>
+  );
+}
 
 export default function WhosPlaying() {
   const { state, ready } = usePocket();
@@ -28,24 +65,7 @@ export default function WhosPlaying() {
       ) : (
         <div className={styles.grid}>
           {state.kids.map((kid, i) => (
-            <MotionLink
-              key={kid.id}
-              href={`/kid/${kid.id}`}
-              className={styles.tile}
-              style={{ ["--tile" as string]: KID_COLORS[kid.color].main }}
-              whileTap={reduce ? undefined : { scaleX: 1.05, scaleY: 0.92 }}
-              transition={{ type: "spring", stiffness: 500, damping: 18 }}
-              aria-label={`${kid.name}, tap to play`}
-            >
-              <motion.span
-                className={styles.mascot}
-                animate={reduce ? undefined : { y: [0, -7, 0] }}
-                transition={reduce ? undefined : { duration: 2.4, repeat: Infinity, ease: "easeInOut", delay: i * 0.45 }}
-              >
-                <Mascot id={kid.mascot} color={kid.color} size="100%" />
-              </motion.span>
-              <span className={styles.name}>{kid.name}</span>
-            </MotionLink>
+            <Tile key={kid.id} kid={kid} index={i} reduce={!!reduce} />
           ))}
         </div>
       )}

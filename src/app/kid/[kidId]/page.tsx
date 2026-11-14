@@ -9,6 +9,7 @@ import { InterestCelebration } from "@/components/kid/InterestCelebration";
 import { JobCard } from "@/components/kid/JobCard";
 import { useKid } from "@/components/kid/KidContext";
 import { useJarStory } from "@/components/kid/useJarStory";
+import { useIdleLoop } from "@/lib/idle";
 import { formatRate, interestDue, kidInterest, PER_EVERY } from "@/lib/interest";
 import { balanceOf, jobsForKid } from "@/lib/selectors";
 import { sound } from "@/lib/sound";
@@ -19,6 +20,8 @@ export default function KidHome() {
   const kid = useKid();
   const { state, ready, actions } = usePocket();
   const reduce = useReducedMotion();
+  const jobsBox = useRef<HTMLDivElement>(null);
+  const turn = useRef(0);
 
   // Interest is paid once as the screen opens (the ref also keeps React strict mode's double effect from paying twice).
   // If at least 1c was paid, the celebration runs first; the jar is kept at its old balance until it is dismissed,
@@ -52,6 +55,35 @@ export default function KidHome() {
   const week = jobs.filter((j) => j.job.repeat === "weekly");
   const allSettled = jobs.length > 0 && jobs.every((j) => j.status !== "todo");
 
+  // The pictures of jobs still to do take turns giving a small "pick me" wiggle, one at a time, only the ones in view.
+  const partyOpen = useRef(false);
+  partyOpen.current = !!party;
+  useIdleLoop(
+    jobsBox,
+    () => {
+      if (partyOpen.current) return false;
+      const room = { w: window.innerWidth, h: window.innerHeight };
+      const seen = Array.from(jobsBox.current?.querySelectorAll<HTMLElement>("[data-pic][data-todo]") ?? []).filter((el) => {
+        const r = el.getBoundingClientRect();
+        return r.left >= 0 && r.right <= room.w && r.top >= 0 && r.bottom <= room.h;
+      });
+      if (!seen.length) return false;
+      const pic = seen[turn.current++ % seen.length];
+      pic.animate(
+        [
+          { translate: "0 0", rotate: "0deg", easing: "cubic-bezier(0.16, 1, 0.3, 1)" },
+          { translate: "0 -5px", rotate: "-8deg", offset: 0.2 },
+          { translate: "0 -2px", rotate: "7deg", offset: 0.45 },
+          { rotate: "-4deg", offset: 0.68 },
+          { rotate: "2deg", offset: 0.85 },
+          { translate: "0 0", rotate: "0deg" },
+        ],
+        { duration: 760, easing: "ease-in-out" },
+      );
+    },
+    { min: 3500, max: 6000, first: [4000, 7000], exclusive: 800 },
+  );
+
   return (
     <div className={styles.home}>
       {party && <InterestCelebration kid={kid} cents={party.cents} days={party.days} before={party.before} onDone={() => setParty(null)} />}
@@ -74,10 +106,10 @@ export default function KidHome() {
         />
       </section>
 
-      <div className={styles.jobs}>
+      <div ref={jobsBox} className={styles.jobs}>
         {jobs.length === 0 && (
           <div className={styles.happy}>
-            <Mascot id={kid.mascot} color={kid.color} size={96} />
+            <Mascot id={kid.mascot} color={kid.color} size={96} alive />
             <p>No jobs yet. Ask a grown-up what you can do!</p>
           </div>
         )}
@@ -89,7 +121,7 @@ export default function KidHome() {
               animate={reduce ? undefined : { y: [0, -10, 0], rotate: [0, -4, 4, 0] }}
               transition={reduce ? undefined : { duration: 1.8, repeat: Infinity, ease: "easeInOut" }}
             >
-              <Mascot id={kid.mascot} color={kid.color} size="100%" />
+              <Mascot id={kid.mascot} color={kid.color} size="100%" alive />
             </motion.span>
             <p>
               All done for now!
