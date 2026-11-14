@@ -1,6 +1,7 @@
 "use client";
 
 import { motion, useReducedMotion } from "motion/react";
+import { useRef } from "react";
 import { Mascot } from "@/components/art/Mascot";
 import { BalanceHero } from "@/components/kid/BalanceHero";
 import { Jar } from "@/components/kid/Jar";
@@ -20,7 +21,11 @@ export default function KidHome() {
   const story = useJarStory(kid.id, balance, kid.goal);
   const reached = !!kid.goal && balance >= kid.goal.priceCents;
 
+  // Jobs to do come first when the screen opens; cards then stay put while the child claims them.
+  const rank = useRef<Map<string, number>>(new Map());
   const jobs = jobsForKid(state, kid.id, Date.now());
+  for (const j of jobs) if (!rank.current.has(j.job.id)) rank.current.set(j.job.id, j.status === "todo" ? 0 : j.status === "waiting" ? 1 : 2);
+  jobs.sort((a, b) => (rank.current.get(a.job.id) ?? 0) - (rank.current.get(b.job.id) ?? 0));
   const today = jobs.filter((j) => j.job.repeat !== "weekly");
   const week = jobs.filter((j) => j.job.repeat === "weekly");
   const allSettled = jobs.length > 0 && jobs.every((j) => j.status !== "todo");

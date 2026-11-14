@@ -80,5 +80,5 @@ export function lineY(goal: Goal): number {
 
 /** Glass height in cqw: just tall enough for the goal line and its tag. */
 export function jarHeight(goal?: Goal): number {
-  return goal ? Math.max(46, lineY(goal) + 15) : NO_GOAL_HEIGHT;
+  return goal ? Math.max(46, lineY(goal) + 19) : NO_GOAL_HEIGHT;
 }

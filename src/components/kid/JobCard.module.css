@@ -13,6 +13,7 @@
   box-shadow: var(--press);
   list-style: none;
   min-width: 0;
+  container-type: inline-size;
 }
 
 .card[data-status="done"] {
@@ -123,6 +124,7 @@
   margin-top: auto;
   /* leave room for the 5px press shadow inside the card */
   margin-bottom: 0;
+  padding-inline: 12px;
 }
 
 .state {
@@ -159,5 +161,29 @@
 @media (prefers-reduced-motion: reduce) {
   .pic {
     transition: none;
+  }
+}
+
+@container (max-width: 230px) {
+  .did {
+    font-size: 1.45rem;
+  }
+
+  .state > svg {
+    display: none;
+  }
+
+  .state[data-kind="waiting"] {
+    text-align: center;
+  }
+
+  .state {
+    gap: 8px;
+    padding: 8px 10px;
+    font-size: 1.02rem;
+  }
+
+  .name {
+    font-size: 1.35rem;
   }
 }

@@ -5,6 +5,7 @@
 }
 
 .number {
+  position: relative;
   width: 100%;
   font-size: clamp(4rem, 22vw, 7.5rem);
   font-weight: var(--w-display);
@@ -17,4 +18,17 @@
 .label {
   font-size: 1.35rem;
   font-weight: var(--w-label);
+}
+
+/* Invisible copy of the widest value, measured to pick the font size. */
+.sizer {
+  position: absolute;
+  left: 0;
+  top: 0;
+  visibility: hidden;
+  white-space: nowrap;
+  font-weight: var(--w-display);
+  letter-spacing: -0.01em;
+  line-height: 1;
+  pointer-events: none;
 }
